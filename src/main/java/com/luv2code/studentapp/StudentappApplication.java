@@ -32,7 +32,7 @@ public class StudentappApplication {
     }
 
     private void createStudents(StudentDAO studentDAO) {
-
+0.
         Student s1 = new Student("Redwan", "Pranta", "redwan@gmail.com");
         Student s2 = new Student("Abdullah", "Mahfuj", "mahfuj@gmail.com");
         Student s3 = new Student("Mohammad", "Karim", "karim@gmail.com");

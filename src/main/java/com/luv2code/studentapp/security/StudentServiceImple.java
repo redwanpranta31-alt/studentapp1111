@@ -6,6 +6,7 @@ import com.luv2code.studentapp.department.Department;
 import com.luv2code.studentapp.department.DepartmentDAO;
 import com.luv2code.studentapp.student.Student;
 import com.luv2code.studentapp.student.StudentDAO;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -13,11 +14,13 @@ public class StudentServiceImple implements StudentService {
 
     private StudentDAO studentDAO;
     private DepartmentDAO departmentDAO;
+    private BCryptPasswordEncoder passwordEncoder;
 
-    public StudentServiceImple(StudentDAO studentDAO, DepartmentDAO departmentDAO) {
+    public StudentServiceImple(StudentDAO studentDAO, DepartmentDAO departmentDAO,BCryptPasswordEncoder passwordEncoder) {
 
         this.studentDAO = studentDAO;
         this.departmentDAO = departmentDAO;
+        this.passwordEncoder=passwordEncoder;
     }
 
 
@@ -37,6 +40,7 @@ public class StudentServiceImple implements StudentService {
         student.setFirst_name(studentRegistrationDTO.getFirst_name());
         student.setLast_name(studentRegistrationDTO.getLast_name());
         student.setEmail(studentRegistrationDTO.getEmail());
+        student.setPassword(passwordEncoder.encode(studentRegistrationDTO.getPassword()));
         student.setDepartments(department);
 
         studentDAO.save(student);

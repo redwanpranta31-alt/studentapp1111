@@ -60,7 +60,7 @@ public class StudentRegistrationDTO {
         this.department_id = department_id;
 
 }
-public  String getPassworda(){
+public  String getPassword(){
         return password;
 
 }

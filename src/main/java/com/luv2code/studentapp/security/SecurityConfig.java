@@ -9,13 +9,14 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
  @Configuration
 public class SecurityConfig {
-/*
+
      @Bean
      public BCryptPasswordEncoder passwordEncoder(){
          return new BCryptPasswordEncoder();
@@ -23,38 +24,23 @@ public class SecurityConfig {
      }
 
      @Bean
-     public DaoAuthenticationProvider authenticationProvider(StudentService studentService){
+     public DaoAuthenticationProvider authenticationProvider(UserDetailsService userDetailsService){
 
          DaoAuthenticationProvider auth = new DaoAuthenticationProvider();
-         auth.setUserDetailsService(studentService);
+         auth.setUserDetailsService(userDetailsService);
          auth.setPasswordEncoder(passwordEncoder());
          return auth;
-     }*/
+     }
 
-    @Bean
-    public InMemoryUserDetailsManager userDetailsManager(){
-
-        UserDetails redwan = User.builder()
-                .username("redwan")
-                .password("{noop}redwan1234")
-                .roles("STUDENT")
-                .build();
-
-        UserDetails karim = User.builder()
-                .username("karim")
-                .password("{noop}karim1234")
-                .roles("TEACHER")
-                .build();
-
-return new InMemoryUserDetailsManager(redwan,karim);
-
-    }
    @Bean
 
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
+    public SecurityFilterChain filterChain(HttpSecurity http, DaoAuthenticationProvider authProvider) throws Exception{
+       http.authenticationProvider(authProvider);
 
         http.authorizeHttpRequests(configurer ->
                 configurer
+                        .requestMatchers(HttpMethod.GET, "/register").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/register").permitAll()
                         .requestMatchers(HttpMethod.GET,"/allstudent").hasRole("STUDENT")
                         .requestMatchers(HttpMethod.GET,"/allstudent/**").hasRole("STUDENT")
                         .requestMatchers(HttpMethod.GET,"/allteacher").hasRole("TEACHER")
@@ -62,6 +48,7 @@ return new InMemoryUserDetailsManager(redwan,karim);
                         .requestMatchers(HttpMethod.POST,"/allteacher").hasRole("TEACHER")
 
 
+.anyRequest().authenticated()
 
 
 
