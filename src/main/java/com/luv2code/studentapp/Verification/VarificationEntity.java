@@ -12,6 +12,7 @@ public class VarificationEntity {
 @Column(name = "Id")
     private Long id;
 
+
 @Column(name = "Token")
     private String token;
 @OneToOne
